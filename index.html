@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Study Planner</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Study Planner</h1>
+
+    <div id="suggestionBox">
+      <p>Saran hari ini: -</p>
+    </div>
+
+    <div class = "progress-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <p id="progressText">Progress: 0%</p>
+
+    <div class="input-section">
+      <input type="text" placeholder="Masukkan tugas.." id="taskInput"/>
+      <button id="addBtn">Tambah</button>
+    </div>
+
+    <ul id="taskList" class="task-list"></ul>
+    
+  </div>
+  <script>
+    document.getElementById("addBtn").addEventListener("click", addTask);
+
+    function addTask() {
+      const input = document.getElementById("taskInput");
+      const taskText = input.value;
+
+
+      if (taskText === "") return;
+
+      createTask(taskText);
+
+      input.value = "";
+
+      updateProgress();
+      updateSuggestion();
+      saveData();
+    }
+
+    function updateProgress() {
+      const tasks = document.querySelectorAll("#taskList li");
+      const total = tasks.length;
+
+      const done = document.querySelectorAll("#taskList input[type='checkbox']:checked").length;
+
+      const percent = total === 0 ? 0 : Math.round((done / total) * 100);
+
+      document.getElementById("progressBar").style.width = percent + "%";
+      document.getElementById("progressText").textContent = "Progress: " + percent + "%";
+    }
+
+    function updateSuggestion(){
+      const tasks = document.querySelectorAll("#taskList li");
+
+      let suggestion = null;
+
+      tasks.forEach((li) => {
+        const checkbox = li.querySelector("input[type='checkbox']");
+        const text = li.querySelector("span").textContent.trim();
+
+        if (!checkbox.checked && !suggestion) {
+          suggestion = text;
+        }
+      });
+
+      const box = document.getElementById("suggestionBox");
+
+      if (suggestion) {
+        box.textContent = "Saran hari ini: Kerjakan " + suggestion;
+      } else {
+        box.textContent = "Semua tugas selesai";
+      }
+    }
+
+    function saveData() {
+      const tasks = [];
+      document.querySelectorAll("#taskList li").forEach((li) => {
+        const text = li.querySelector("span").textContent.trim();
+        const done = li.querySelector("input").checked;
+
+        tasks.push({ text, done});
+      });
+
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+
+    function loadData() {
+      const list = document.getElementById("taskList");
+      list.innerHTML = "";
+      const data = JSON.parse(localStorage.getItem("tasks")) || [];
+
+      data.forEach((task) => {
+        createTask(task.text, task.done);
+      });
+
+    }
+
+    function createTask(taskText, isDone = false) {
+        const li = document.createElement("li");
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = isDone;
+
+        const span = document.createElement("span");
+        span.textContent = " " + taskText;
+
+        if (isDone) {
+          span.style.textDecoration = "line-through";
+        }
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Hapus";
+
+        checkbox.onclick = function () {
+          span.style.textDecoration = checkbox.checked ? "line-through" : "none";
+          updateProgress();
+          updateSuggestion();
+          saveData();
+        };
+
+        deleteBtn.onclick = function () {
+          li.remove();
+          updateProgress();
+          updateSuggestion();
+          saveData();
+        };
+
+        const left = document.createElement("div");
+        left.appendChild(checkbox);
+        left.appendChild(span);
+
+        const right = document.createElement("div");
+        right.appendChild(deleteBtn);
+
+        li.appendChild(left);
+        li.appendChild(right);
+
+        document.getElementById("taskList").appendChild(li);
+      }
+
+    loadData();
+    updateProgress();
+    updateSuggestion();
+  </script>
+
+</body>
+</html>
