@@ -22,7 +22,13 @@ h1 {
     margin-bottom: 20px;
 }
 
-input {
+.input-section input {
+    flex: 1;
+    padding: 10px;
+    min-width: 0;
+}
+
+#taskDate {
     flex: 1;
     padding: 10px;
 }

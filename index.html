@@ -20,23 +20,24 @@
 
     <div class="input-section">
       <input type="text" placeholder="Masukkan tugas.." id="taskInput"/>
-      <button id="addBtn">Tambah</button>
+      <input type="date" id="taskDate">
+      <button onclick="addTask()">Tambah</button>
     </div>
 
     <ul id="taskList" class="task-list"></ul>
     
   </div>
   <script>
-    document.getElementById("addBtn").addEventListener("click", addTask);
 
     function addTask() {
       const input = document.getElementById("taskInput");
       const taskText = input.value;
+      const taskDate = document.getElementById("taskDate").value;
 
 
       if (taskText === "") return;
 
-      createTask(taskText);
+      createTask(taskText, false, taskDate);
 
       input.value = "";
 
@@ -60,23 +61,32 @@
     function updateSuggestion(){
       const tasks = document.querySelectorAll("#taskList li");
 
-      let suggestion = null;
+      let nearestTask = null;
+      let nearestDate = null;
 
       tasks.forEach((li) => {
         const checkbox = li.querySelector("input[type='checkbox']");
         const text = li.querySelector("span").textContent.trim();
 
-        if (!checkbox.checked && !suggestion) {
-          suggestion = text;
+        const small = li.querySelector("small");
+        const dateText = small.textContent.replace("📅 ", "").trim();
+
+        if (!checkbox.checked && dateText) {
+          const taskDate = new Date(dateText);
+
+          if (nearestDate === null || taskDate < nearestDate) {
+            nearestDate = taskDate;
+            nearestTask = text;
+          }
         }
       });
 
       const box = document.getElementById("suggestionBox");
 
-      if (suggestion) {
-        box.textContent = "Saran hari ini: Kerjakan " + suggestion;
-      } else {
-        box.textContent = "Semua tugas selesai";
+      if (nearestTask) {
+        box.textContent = "🔥 Saran hari ini: kerjakan " + nearestTask + " (deadline terdekat)";
+      }else{
+        box.textContent = "🔥 Semua tugas selesai✨"
       }
     }
 
@@ -85,8 +95,9 @@
       document.querySelectorAll("#taskList li").forEach((li) => {
         const text = li.querySelector("span").textContent.trim();
         const done = li.querySelector("input").checked;
-
-        tasks.push({ text, done});
+        
+        const date = li.querySelector("small")?.textContent.replace("📅 ", "") || "";
+        tasks.push({ text, done, date});
       });
 
       localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -98,12 +109,12 @@
       const data = JSON.parse(localStorage.getItem("tasks")) || [];
 
       data.forEach((task) => {
-        createTask(task.text, task.done);
+        createTask(task.text, task.done, task.date);
       });
 
     }
 
-    function createTask(taskText, isDone = false) {
+    function createTask(taskText, isDone = false, taskDate = "") {
         const li = document.createElement("li");
 
         const checkbox = document.createElement("input");
@@ -112,6 +123,8 @@
 
         const span = document.createElement("span");
         span.textContent = " " + taskText;
+        const dateText = document.createElement("small");
+        dateText.textContent = "📅 " + taskDate;
 
         if (isDone) {
           span.style.textDecoration = "line-through";
@@ -129,6 +142,7 @@
 
         deleteBtn.onclick = function () {
           li.remove();
+
           updateProgress();
           updateSuggestion();
           saveData();
@@ -137,6 +151,7 @@
         const left = document.createElement("div");
         left.appendChild(checkbox);
         left.appendChild(span);
+        left.appendChild(dateText);
 
         const right = document.createElement("div");
         right.appendChild(deleteBtn);
