@@ -6,27 +6,137 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Study Planner</h1>
+  <div class="app">
+    <aside class="sidebar">
+      <h2>Study Planner</h2>
 
-    <div id="suggestionBox">
-      <p>Saran hari ini: -</p>
+      <ul>
+        <li onclick="showPage('dashboard')">Dashboard</li>
+        <li onclick="showPage('tasks')">Tasks</li>
+        <li onclick="showPage('calendar')">Calendar</li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+
+      <div id="dashboardPage">
+      <div class="top-section">
+        <h1>Dashboard</h1>
+      </div>
+
+      <div class="top-header">
+        <div>
+          <h2>Good Morning</h2>
+          <p>Stay productive today!</p>
+        </div>
+
+        <div class="date-box">
+          <p id="todayDate"></p>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="dashboard-card progress-card">
+            <h3>Progress Belajar</h3>
+
+            <div class="progress-container">
+              <div class="progress-bar" id="progressBar"></div>
+            </div>
+
+            <p id="progressText">Progress: 0%</p>
+          </div>
+
+          <div class="dashboard-card recommendation-card">
+            <h3>Rekomendasi Hari Ini</h3>
+
+            <p id="recommendationText">
+              Belum ada tugas
+            </p>
+          </div>
+
+        </div>
+
+        <div class="dashboard-card chart-card">
+
+          <h3>Statistik Tugas</h3>
+          
+          <div class="fake-chart">
+            <div class="pie pie1"></div>
+
+            <div class="chart-info">
+              <p>Mata Kuliah</p>
+              <p>Jenis Tugas</p>
+            </div>
+
+          </div>
+          
+        </div>
+      </div>
+      </div>
+
+    <div id="taskPage" style="display: none;">
+      <div class="task-header">
+        <div>
+          <h2>Task Manager</h2>
+          <p>Kelola tugas dan deadline kamu</p>
+        </div>
+
+        <div class="task-badge">
+          Productivity
+        </div>
+      </div>
+
+      <div class="task-layout">
+        <div class="task-left">
+          <div class="planner-card">
+            <div class="container">
+              <h1>Study Planner</h1>
+      
+              <div id="suggestionBox">
+                <p>Saran hari ini: -</p>
+              </div>
+            </div>
+          </div>
+          <div class = "progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          <p id="progressText">Progress: 0%</p>
+      
+          <div class="input-section">
+            <input type="text" placeholder="Masukkan tugas.." id="taskInput"/>
+            <input type="date" id="taskDate">
+            <button onclick="addTask()">Tambah</button>
+          </div>
+        </div>
+
+        <div class="task-right">
+          <div class="dashboard-card mini-card">
+            <h3>Deadline Terdekat</h3>
+
+            <p id="nearestDeadline">
+              Tidak ada deadline
+            </p>
+          </div>
+
+          <div class="dashboard-card mini-card">
+            <h3>Produktivitas</h3>
+            <P>Keep going!!</P>
+          </div>
+
+        </div>
+      </div>
+
+      <ul id="taskList" class="task-list"></ul>
+    </div>
     </div>
 
-    <div class = "progress-container">
-      <div class="progress-bar" id="progressBar"></div>
+    <div id="calendarPage" style="display: none;">
+      <div class="dashboard-card">
+        <h2>Calendar</h2>
+        <p>📅 Calendar page coming soon...</p>
+      </div>
     </div>
-    <p id="progressText">Progress: 0%</p>
-
-    <div class="input-section">
-      <input type="text" placeholder="Masukkan tugas.." id="taskInput"/>
-      <input type="date" id="taskDate">
-      <button onclick="addTask()">Tambah</button>
-    </div>
-
-    <ul id="taskList" class="task-list"></ul>
-    
-  </div>
+    </main>
+  </div> 
   <script>
 
     function addTask() {
@@ -81,12 +191,15 @@
         }
       });
 
-      const box = document.getElementById("suggestionBox");
+      const box = document.getElementById("recommendationText");
+      const deadlineBox = document.getElementById("nearestDeadline");
 
       if (nearestTask) {
-        box.textContent = "🔥 Saran hari ini: kerjakan " + nearestTask + " (deadline terdekat)";
-      }else{
-        box.textContent = "🔥 Semua tugas selesai✨"
+        box.textContent = "🔥 Saran hari ini: kerjakan " + nearestTask;
+        deadlineBox.textContent = nearestTask + " 📅";
+      } else {
+        box.textContent = "🔥 Semua tugas selesai✨";
+        deadlineBox.textContent = "Tidak ada deadline";
       }
     }
 
@@ -161,6 +274,35 @@
 
         document.getElementById("taskList").appendChild(li);
       }
+
+      const today = new Date();
+
+      const options = {
+        weekday: "long",
+        day: "numeric:",
+        month: "long",
+        year: "numeric"
+      };
+      document.getElementById("todayDate").textContent = today.toLocaleDateString("id-ID", options);
+      today.toLocaleDateString("id-ID", options);
+
+    function showPage(page) {
+      document.getElementById("dashboardPage").style.display = "none";
+      document.getElementById("taskPage").style.display = "none";
+      document.getElementById("calendarPage").style.display = "none";
+
+      if (page === "dashboard"){
+        document.getElementById("dashboardPage").style.display = "block";
+      }
+
+      if (page === "tasks") {
+        document.getElementById("taskPage").style.display = "block";
+      }
+
+      if (page === "calendar") {
+        document.getElementById("calendarPage").style.display = "block";
+      }
+    }
 
     loadData();
     updateProgress();
