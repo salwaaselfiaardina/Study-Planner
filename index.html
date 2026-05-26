@@ -1,313 +1,165 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <title>Study Planner</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="app">
-    <aside class="sidebar">
-      <h2>Study Planner</h2>
+  <head>
+    <meta charset="UTF-8">
+    <title>Study Planner</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <h2>Study Planner</h2>
 
-      <ul>
-        <li onclick="showPage('dashboard')">Dashboard</li>
-        <li onclick="showPage('tasks')">Tasks</li>
-        <li onclick="showPage('calendar')">Calendar</li>
-      </ul>
-    </aside>
+        <ul>
+          <li onclick="showPage('dashboard')">Dashboard</li>
+          <li onclick="showPage('tasks')">Tasks</li>
+          <li onclick="showPage('calendar')">Calendar</li>
+        </ul>
+      </aside>
 
-    <main class="main-content">
+      <main class="main-content">
 
-      <div id="dashboardPage">
-      <div class="top-section">
-        <h1>Dashboard</h1>
-      </div>
+        <div id="dashboardPage">
+          <div class="top-section">
+            <h1>Dashboard</h1>
+          </div>
 
-      <div class="top-header">
-        <div>
-          <h2>Good Morning</h2>
-          <p>Stay productive today!</p>
-        </div>
-
-        <div class="date-box">
-          <p id="todayDate"></p>
-        </div>
-
-        <div class="dashboard-grid">
-          <div class="dashboard-card progress-card">
-            <h3>Progress Belajar</h3>
-
-            <div class="progress-container">
-              <div class="progress-bar" id="progressBar"></div>
+          <div class="top-header">
+            <div>
+              <h2>Good Morning</h2>
+              <p>Stay productive today!</p>
             </div>
 
-            <p id="progressText">Progress: 0%</p>
-          </div>
-
-          <div class="dashboard-card recommendation-card">
-            <h3>Rekomendasi Hari Ini</h3>
-
-            <p id="recommendationText">
-              Belum ada tugas
-            </p>
-          </div>
-
-        </div>
-
-        <div class="dashboard-card chart-card">
-
-          <h3>Statistik Tugas</h3>
-          
-          <div class="fake-chart">
-            <div class="pie pie1"></div>
-
-            <div class="chart-info">
-              <p>Mata Kuliah</p>
-              <p>Jenis Tugas</p>
+            <div class="date-box">
+              <p id="todayDate"></p>
             </div>
 
           </div>
+
+          <div class="dashboard-grid">
+            <div class="dashboard-card progress-card">
+              <h3>Progress Belajar</h3>
+
+              <div class="progress-container">
+               <div class="progress-bar" id="dashboardProgressBar"></div>
+              </div>
+
+              <p id="dashboardProgressText">Progress: 0%</p>
+            </div>
+
+            <div class="dashboard-card recommendation-card">
+              <h3>Rekomendasi Hari Ini</h3>
+
+              <p id="recommendationText">
+                Belum ada tugas
+              </p>
+            </div>
+
+          </div>
+
+          <div class="dashboard-card chart-card">
+
+            <h3>Statistik Tugas</h3>
           
-        </div>
-      </div>
-      </div>
+            <div class="fake-chart">
+              <div class="pie pie1"></div>
 
-    <div id="taskPage" style="display: none;">
-      <div class="task-header">
-        <div>
-          <h2>Task Manager</h2>
-          <p>Kelola tugas dan deadline kamu</p>
-        </div>
+                <div class="chart-info">
+                  <p>Mata Kuliah</p>
+                  <p>Jenis Tugas</p>
+                </div>
 
-        <div class="task-badge">
-          Productivity
-        </div>
-      </div>
-
-      <div class="task-layout">
-        <div class="task-left">
-          <div class="planner-card">
-            <div class="container">
-              <h1>Study Planner</h1>
-      
-              <div id="suggestionBox">
-                <p>Saran hari ini: -</p>
               </div>
             </div>
           </div>
-          <div class = "progress-container">
-            <div class="progress-bar" id="progressBar"></div>
-          </div>
-          <p id="progressText">Progress: 0%</p>
-      
-          <div class="input-section">
-            <input type="text" placeholder="Masukkan tugas.." id="taskInput"/>
-            <input type="date" id="taskDate">
-            <button onclick="addTask()">Tambah</button>
-          </div>
         </div>
-
-        <div class="task-right">
-          <div class="dashboard-card mini-card">
-            <h3>Deadline Terdekat</h3>
-
-            <p id="nearestDeadline">
-              Tidak ada deadline
-            </p>
-          </div>
-
-          <div class="dashboard-card mini-card">
-            <h3>Produktivitas</h3>
-            <P>Keep going!!</P>
-          </div>
-
-        </div>
-      </div>
-
-      <ul id="taskList" class="task-list"></ul>
-    </div>
-    </div>
-
-    <div id="calendarPage" style="display: none;">
-      <div class="dashboard-card">
-        <h2>Calendar</h2>
-        <p>📅 Calendar page coming soon...</p>
-      </div>
-    </div>
-    </main>
-  </div> 
-  <script>
-
-    function addTask() {
-      const input = document.getElementById("taskInput");
-      const taskText = input.value;
-      const taskDate = document.getElementById("taskDate").value;
-
-
-      if (taskText === "") return;
-
-      createTask(taskText, false, taskDate);
-
-      input.value = "";
-
-      updateProgress();
-      updateSuggestion();
-      saveData();
-    }
-
-    function updateProgress() {
-      const tasks = document.querySelectorAll("#taskList li");
-      const total = tasks.length;
-
-      const done = document.querySelectorAll("#taskList input[type='checkbox']:checked").length;
-
-      const percent = total === 0 ? 0 : Math.round((done / total) * 100);
-
-      document.getElementById("progressBar").style.width = percent + "%";
-      document.getElementById("progressText").textContent = "Progress: " + percent + "%";
-    }
-
-    function updateSuggestion(){
-      const tasks = document.querySelectorAll("#taskList li");
-
-      let nearestTask = null;
-      let nearestDate = null;
-
-      tasks.forEach((li) => {
-        const checkbox = li.querySelector("input[type='checkbox']");
-        const text = li.querySelector("span").textContent.trim();
-
-        const small = li.querySelector("small");
-        const dateText = small.textContent.replace("📅 ", "").trim();
-
-        if (!checkbox.checked && dateText) {
-          const taskDate = new Date(dateText);
-
-          if (nearestDate === null || taskDate < nearestDate) {
-            nearestDate = taskDate;
-            nearestTask = text;
-          }
-        }
-      });
-
-      const box = document.getElementById("recommendationText");
-      const deadlineBox = document.getElementById("nearestDeadline");
-
-      if (nearestTask) {
-        box.textContent = "🔥 Saran hari ini: kerjakan " + nearestTask;
-        deadlineBox.textContent = nearestTask + " 📅";
-      } else {
-        box.textContent = "🔥 Semua tugas selesai✨";
-        deadlineBox.textContent = "Tidak ada deadline";
-      }
-    }
-
-    function saveData() {
-      const tasks = [];
-      document.querySelectorAll("#taskList li").forEach((li) => {
-        const text = li.querySelector("span").textContent.trim();
-        const done = li.querySelector("input").checked;
         
-        const date = li.querySelector("small")?.textContent.replace("📅 ", "") || "";
-        tasks.push({ text, done, date});
-      });
+        <div id="taskPage" style="display: none;">
+          <div class="task-header">
+            <div>
+              <h2>Task Manager</h2>
+              <p>Kelola tugas dan deadline kamu</p>
+            </div>
 
-      localStorage.setItem("tasks", JSON.stringify(tasks));
-    }
+            <div class="task-badge">
+              Productivity
+            </div>
+            
+          </div>
 
-    function loadData() {
-      const list = document.getElementById("taskList");
-      list.innerHTML = "";
-      const data = JSON.parse(localStorage.getItem("tasks")) || [];
+          <div class="task-layout">
+            <div class="task-left">
+              <div class="planner-card">
+                <div class="container">
+                  <h1>Study Planner</h1>
+                  <div id="suggestionBox">
+                    <p>Saran hari ini: -</p>
+                  </div>
+                </div>
+              </div>
+              <div class = "progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+              </div>
+              <p id="progressText">Progress: 0%</p>
+      
+              <div class="input-section">
+                <input type="text" placeholder="Masukkan tugas.." id="taskInput"/>
+                <input type="date" id="taskDate">
+                <button onclick="addTask()">Tambah</button>
+              </div>
 
-      data.forEach((task) => {
-        createTask(task.text, task.done, task.date);
-      });
+              <ul id="taskList" class="task-list"></ul>
+            </div>
 
-    }
+            <div class="task-right">
+              <div class="dashboard-card mini-card">
+                <h3>Deadline Terdekat</h3>
 
-    function createTask(taskText, isDone = false, taskDate = "") {
-        const li = document.createElement("li");
+                <p id="nearestDeadline">
+                Tidak ada deadline
+                </p>
+              </div>
 
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.checked = isDone;
+              <div class="dashboard-card mini-card">
+                <h3>Produktivitas</h3>
+                <P>Keep going!!</P>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        const span = document.createElement("span");
-        span.textContent = " " + taskText;
-        const dateText = document.createElement("small");
-        dateText.textContent = "📅 " + taskDate;
+        <div id="calendarPage" style="display: none;">
+          <div class="calendar-header">
+            <div>
+              <h2>Calendar</h2>
+              <p>Kelola jadwal dan deadline tugas</p>
+            </div>
+          </div>
 
-        if (isDone) {
-          span.style.textDecoration = "line-through";
-        }
+          <div class="calendar-card">
+            <div class="calendar-top">
+              <button id="prevMonth">‹</button>
+              <h3 id="monthYear"></h3>
+              <button id="nextMonth">›</button>
+            </div>
 
-        const deleteBtn = document.createElement("button");
-        deleteBtn.textContent = "Hapus";
+            <div class="calendar-days">
 
-        checkbox.onclick = function () {
-          span.style.textDecoration = checkbox.checked ? "line-through" : "none";
-          updateProgress();
-          updateSuggestion();
-          saveData();
-        };
+              <div>Min</div>
+              <div>Sen</div>
+              <div>Sel</div>
+              <div>Rab</div>
+              <div>Kam</div>
+              <div>Jum</div>
+              <div>Sab</div>
+            </div>
 
-        deleteBtn.onclick = function () {
-          li.remove();
-
-          updateProgress();
-          updateSuggestion();
-          saveData();
-        };
-
-        const left = document.createElement("div");
-        left.appendChild(checkbox);
-        left.appendChild(span);
-        left.appendChild(dateText);
-
-        const right = document.createElement("div");
-        right.appendChild(deleteBtn);
-
-        li.appendChild(left);
-        li.appendChild(right);
-
-        document.getElementById("taskList").appendChild(li);
-      }
-
-      const today = new Date();
-
-      const options = {
-        weekday: "long",
-        day: "numeric:",
-        month: "long",
-        year: "numeric"
-      };
-      document.getElementById("todayDate").textContent = today.toLocaleDateString("id-ID", options);
-      today.toLocaleDateString("id-ID", options);
-
-    function showPage(page) {
-      document.getElementById("dashboardPage").style.display = "none";
-      document.getElementById("taskPage").style.display = "none";
-      document.getElementById("calendarPage").style.display = "none";
-
-      if (page === "dashboard"){
-        document.getElementById("dashboardPage").style.display = "block";
-      }
-
-      if (page === "tasks") {
-        document.getElementById("taskPage").style.display = "block";
-      }
-
-      if (page === "calendar") {
-        document.getElementById("calendarPage").style.display = "block";
-      }
-    }
-
-    loadData();
-    updateProgress();
-    updateSuggestion();
-  </script>
-
-</body>
+            <div class="calendar-grid" id="calendarGrid"></div>
+          </div>
+        </div>
+      
+      </main>
+    </div> 
+    <script src="script.js"></script>
+  </body>
 </html>

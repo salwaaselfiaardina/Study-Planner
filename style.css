@@ -39,7 +39,12 @@ body {
 
 .main-content {
     flex: 1;
-    padding: 40px;
+    padding: 30px;
+    overflow-y: auto;
+}
+
+#dashboardPage, #taskPage, #calendarPage {
+    width: 100%;
 }
 
 .planner-card {
@@ -316,4 +321,71 @@ body {
 
 .mini-card p {
     color: #6B7280;
+}
+
+.calendar-header {
+    margin-bottom: 20px;
+}
+
+.calendar-header h2 {
+    margin: 0;
+}
+
+.calendar-header p {
+    color: #6B7280;
+}
+
+.calendar-grid {
+    background: white;
+    padding: 25px;
+    border-radius: 25px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.calendar-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.calendar-top button {
+    background: #6C63FF;
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.calendar-days,
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+}
+
+.calendar-days div {
+    text-align: center;
+    font-weight: bold;
+    color: #6B7280;
+}
+
+.calendar-grid div {
+    background: #F9FAFB;
+    height: 80px;
+    border-radius: 16px;
+    padding: 10px;
+    transition: 0.3s;
+}
+
+.calendar-grid div:hover {
+    background: #EEF2FF;
+}
+
+.today {
+    background: #6C63FF;
+    color: white;
+    font-weight: bold;
 }
