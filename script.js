@@ -2,11 +2,12 @@ function addTask() {
       const input = document.getElementById("taskInput");
       const taskText = input.value;
       const taskDate = document.getElementById("taskDate").value;
+      const taskSubject = document.getElementById("taskSubject").value;
 
 
       if (taskText === "") return;
 
-      createTask(taskText, false, taskDate);
+      createTask(taskText, false, taskDate, taskSubject);
 
       input.value = "";
 
@@ -69,9 +70,10 @@ function addTask() {
       document.querySelectorAll("#taskList li").forEach((li) => {
         const text = li.querySelector("span").textContent.trim();
         const done = li.querySelector("input").checked;
+        const subject = li.dataset.subject;
         
         const date = li.querySelector("small")?.textContent.replace("📅 ", "") || "";
-        tasks.push({ text, done, date});
+        tasks.push({ text, done, date, subject });
       });
 
       localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -83,13 +85,14 @@ function addTask() {
       const data = JSON.parse(localStorage.getItem("tasks")) || [];
 
       data.forEach((task) => {
-        createTask(task.text, task.done, task.date);
+        createTask(task.text, task.done, task.date, task.subject);
       });
 
     }
 
-    function createTask(taskText, isDone = false, taskDate = "") {
+    function createTask(taskText, isDone = false, taskDate = "", taskSubject = "") {
         const li = document.createElement("li");
+        li.dataset.subject = taskSubject;
 
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
@@ -140,7 +143,7 @@ function addTask() {
 
       const options = {
         weekday: "long",
-        day: "numeric:",
+        day: "numeric",
         month: "long",
         year: "numeric"
       };
@@ -163,12 +166,17 @@ function addTask() {
       if (page === "calendar") {
         document.getElementById("calendarPage").style.display = "block";
       }
+
+      if (page === "dashboard" && taskChart) {
+        taskChart.resize();
+      }
     }
+    console.log("showPage loaded");
 
     const monthYear = document.getElementById("monthYear");
     const calendarGrid = document.getElementById("calendarGrid");
 
-    let currentMonth = new Date();
+    let currentDate = new Date();
 
     function renderCalendar() {
 
@@ -220,8 +228,52 @@ function addTask() {
         renderCalendar();
     };
 
-    renderCalendar();
+    let taskChart = null;
+
+    function initializeChart() {
+      const ctx = document.getElementById("taskChart");
+
+      if (!ctx) {
+        console.warn("Canvas 'taskChart' tidak ditemukan!");
+        return;
+      }
+
+      if (taskChart) {
+        taskChart.destroy();
+      }
+
+      taskChart = new Chart(ctx,{
+        type: "pie",
+        data: {
+          labels: ["Tugas", "Kuis", "Proyek"],
+          datasets: [{
+            data: [5, 3, 2],
+            backgroundColor: ['#4A90E2', '#F5A623', '#7ED321']
+          }]
+        }
+      });
+    }
+    
+    function updateChart() {
+      const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+      const subjectCount = {};
+
+      tasks.forEach((task) => {
+        const subject = task.subject || "Lainnya";
+        subjectCount[subject] = (subjectCount[subject] || 0) + 1;
+      });
+
+      if (taskChart) {
+        taskChart.data.labels = Object.keys(subjectCount);
+        taskChart.data.datasets[0].data = Object.values(subjectCount);
+        taskChart.update();
+      }
+    }
 
     loadData();
     updateProgress();
     updateSuggestion();
+    renderCalendar();
+    initializeChart();
+    updateChart();
+    showPage("dashboard");

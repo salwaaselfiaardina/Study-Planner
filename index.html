@@ -61,72 +61,23 @@
 
             <h3>Statistik Tugas</h3>
           
-            <div class="fake-chart">
-              <div class="pie pie1"></div>
-
-                <div class="chart-info">
-                  <p>Mata Kuliah</p>
-                  <p>Jenis Tugas</p>
-                </div>
-
-              </div>
-            </div>
+            <canvas id="taskChart"></canvas>
           </div>
-        </div>
         
-        <div id="taskPage" style="display: none;">
-          <div class="task-header">
-            <div>
-              <h2>Task Manager</h2>
-              <p>Kelola tugas dan deadline kamu</p>
-            </div>
-
-            <div class="task-badge">
-              Productivity
-            </div>
-            
-          </div>
-
-          <div class="task-layout">
-            <div class="task-left">
-              <div class="planner-card">
-                <div class="container">
-                  <h1>Study Planner</h1>
-                  <div id="suggestionBox">
-                    <p>Saran hari ini: -</p>
-                  </div>
-                </div>
-              </div>
-              <div class = "progress-container">
-                <div class="progress-bar" id="progressBar"></div>
-              </div>
-              <p id="progressText">Progress: 0%</p>
-      
-              <div class="input-section">
-                <input type="text" placeholder="Masukkan tugas.." id="taskInput"/>
-                <input type="date" id="taskDate">
-                <button onclick="addTask()">Tambah</button>
-              </div>
-
-              <ul id="taskList" class="task-list"></ul>
-            </div>
-
-            <div class="task-right">
-              <div class="dashboard-card mini-card">
-                <h3>Deadline Terdekat</h3>
-
-                <p id="nearestDeadline">
-                Tidak ada deadline
-                </p>
-              </div>
-
-              <div class="dashboard-card mini-card">
-                <h3>Produktivitas</h3>
-                <P>Keep going!!</P>
-              </div>
-            </div>
-          </div>
         </div>
+        <div id="taskPage" style="display: none;">
+          <div class="task-container">
+            <div class="task-form-card">
+              <h2>Masukkan Tugas</h2>
+
+              <div class="task-form-grid">
+                <input type="text" id="taskSubject" placeholder="Nama Matkul">
+                <input type="text" id="taskLink" placeholder="Tautan">
+                <input type ="text" id="taskInput" placeholder="Nama Tugas">
+                <input type="text" id="taskSubtask" placeholder="Tambah sub tugas">
+              </div>
+            </div>
+          </div>
 
         <div id="calendarPage" style="display: none;">
           <div class="calendar-header">
@@ -160,6 +111,7 @@
       
       </main>
     </div> 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
