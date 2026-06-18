@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Study Planner</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+      <aside class="sidebar">
+        <div class="sidebar-top">
+          <h1 class="logo">Study Planner</h1>
+          <nav>
+            <ul>
+              <li class="active"><a href="dashboard.html">Dashboard</a></li>
+              <li><a href="task.html">Task</a></li>
+              <li><a href="calendar.html">Calendar</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="logout-btn">
+          <a href="#">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            Log out
+          </a>
+        </div>
+      </aside>
+
+      <main class="content">
+        <header class="welcome-header">
+          <h2>Selamat Datang, <span id="userWelcomeName">Pengguna</span>!</h2>
+          <p id="currentDashboardDate">Memuat tanggal...</p>
+        </header>
+
+        <section id="dashboardPage" class="page">
+          <div class="card progress-card-container">
+            <h3>Progress task</h3>
+            <div class="progress-bar">
+              <div class="progress-fill"></div>
+            </div>
+            <p class="progress-text">75%</p>
+          </div>
+
+          <div class="card recommendation-container">
+            <h3>🔥 Saran hari ini:</h3>
+            
+            <div class="recommendation-list">
+              <div class="rec-item">
+                <div class="rec-left">
+                  <span>Kerjakan tugas Kalkulus 2 (tersisa 2 hari untuk pengumpulan)</span>
+                </div>
+                <a href="task-detail.html" class="more-btn">Lainnya</a>
+              </div>
+              <div class="rec-item">
+                <div class="rec-left">
+                  <span>Kerjakan tugas Kalkulus 2 (tersisa 2 hari untuk pengumpulan)</span>
+                </div>
+                <a href="task-detail.html" class="more-btn">Lainnya</a>
+              </div>
+              <div class="rec-item">
+                <div class="rec-left">
+                  <span>Kerjakan tugas Kalkulus 2 (tersisa 2 hari untuk pengumpulan)</span>
+                </div>
+                <a href="task-detail.html" class="more-btn">Lainnya</a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+</body>
+</html>

@@ -2,116 +2,22 @@
 <html lang="id">
   <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Study Planner</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   </head>
+
   <body>
-    <div class="app">
-      <aside class="sidebar">
-        <h2>Study Planner</h2>
+    
 
-        <ul>
-          <li onclick="showPage('dashboard')">Dashboard</li>
-          <li onclick="showPage('tasks')">Tasks</li>
-          <li onclick="showPage('calendar')">Calendar</li>
-        </ul>
-      </aside>
 
-      <main class="main-content">
+    
 
-        <div id="dashboardPage">
-          <div class="top-section">
-            <h1>Dashboard</h1>
-          </div>
-
-          <div class="top-header">
-            <div>
-              <h2>Good Morning</h2>
-              <p>Stay productive today!</p>
-            </div>
-
-            <div class="date-box">
-              <p id="todayDate"></p>
-            </div>
-
-          </div>
-
-          <div class="dashboard-grid">
-            <div class="dashboard-card progress-card">
-              <h3>Progress Belajar</h3>
-
-              <div class="progress-container">
-               <div class="progress-bar" id="dashboardProgressBar"></div>
-              </div>
-
-              <p id="dashboardProgressText">Progress: 0%</p>
-            </div>
-
-            <div class="dashboard-card recommendation-card">
-              <h3>Rekomendasi Hari Ini</h3>
-
-              <p id="recommendationText">
-                Belum ada tugas
-              </p>
-            </div>
-
-          </div>
-
-          <div class="dashboard-card chart-card">
-
-            <h3>Statistik Tugas</h3>
-          
-            <canvas id="taskChart"></canvas>
-          </div>
-        
-        </div>
-        <div id="taskPage" style="display: none;">
-          <div class="task-container">
-            <div class="task-form-card">
-              <h2>Masukkan Tugas</h2>
-
-              <div class="task-form-grid">
-                <input type="text" id="taskSubject" placeholder="Nama Matkul">
-                <input type="text" id="taskLink" placeholder="Tautan">
-                <input type ="text" id="taskInput" placeholder="Nama Tugas">
-                <input type="text" id="taskSubtask" placeholder="Tambah sub tugas">
-              </div>
-            </div>
-          </div>
-
-        <div id="calendarPage" style="display: none;">
-          <div class="calendar-header">
-            <div>
-              <h2>Calendar</h2>
-              <p>Kelola jadwal dan deadline tugas</p>
-            </div>
-          </div>
-
-          <div class="calendar-card">
-            <div class="calendar-top">
-              <button id="prevMonth">‹</button>
-              <h3 id="monthYear"></h3>
-              <button id="nextMonth">›</button>
-            </div>
-
-            <div class="calendar-days">
-
-              <div>Min</div>
-              <div>Sen</div>
-              <div>Sel</div>
-              <div>Rab</div>
-              <div>Kam</div>
-              <div>Jum</div>
-              <div>Sab</div>
-            </div>
-
-            <div class="calendar-grid" id="calendarGrid"></div>
-          </div>
-        </div>
-      
-      </main>
-    </div> 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
+
   </body>
 </html>
